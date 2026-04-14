@@ -41,7 +41,6 @@ def read_employees():
 # call the function and store in the global variable employee
 employees = read_employees()
 
-# print to verify the function works
 print(employees)
 
 
@@ -53,7 +52,6 @@ def column_index(column_name):
 # call the function for "employee_id" and store in the global variable employee
 employee_id_column = column_index("employee_id")
 
-# print to verify the function works
 print("The index for employee_id is : " + str(employee_id_column))
  
 
