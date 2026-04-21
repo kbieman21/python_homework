@@ -1,4 +1,4 @@
-# Task 2
+# Task 2 A Decorator that Takes an Argument
 
 def type_converter(type_of_output):
     def decorator(func):
