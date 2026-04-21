@@ -1,0 +1,15 @@
+
+Function greet
+Positional parameters: none
+Keyword parameters: none
+Result: None
+
+Function pos_args_func
+Positional parameters: [1, 2, 3]
+Keyword parameters: none
+Result: True
+
+Function kw_args_func
+Positional parameters: none
+Keyword parameters: {'a': 1, 'b': 2, 'c': 3}
+Result: <function logger_decorator at 0x00000215034AD760>
