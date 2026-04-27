@@ -59,6 +59,29 @@ print(employee_shape)
 employee_info = more_employees.info()
 print(employee_info)
 
+# Task 4: Data Cleaning
+dirty_data = pd.read_csv('dirty_data.csv')
+print(dirty_data)
 
+clean_data = dirty_data.copy()
+
+clean_data = clean_data.drop_duplicates()
+
+clean_data['Age'] = pd.to_numeric(clean_data['Age'], errors='coerce')
+
+clean_data['Salary'] = pd.to_numeric(clean_data['Salary'], errors='coerce')
+
+clean_data['Age'] = clean_data['Age'].fillna(clean_data['Age'].mean())
+
+clean_data['Salary'] = clean_data['Salary'].fillna(clean_data['Salary'].median())
+
+clean_data['Hire Date'] = pd.to_datetime(clean_data['Hire Date'], errors='coerce')
+clean_data['Hire Date'] = clean_data['Hire Date'].fillna(clean_data['Hire Date'].median())
+
+clean_data['Name'] = clean_data['Name'].str.strip().str.upper()
+clean_data['Department'] = clean_data['Department'].str.strip().str.upper()
+
+
+print(clean_data)
 
 
