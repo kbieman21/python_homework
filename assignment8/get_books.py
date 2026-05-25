@@ -1,18 +1,3 @@
-
-
-# # Start browser
-# driver = webdriver.Chrome(service=service, options=options)
-
-# # Open a website
-# driver.get("https://quotes.toscrape.com/")
-
-# print(driver.title)          # Print page title
-# time.sleep(2)                # Wait a bit
-
-# # Close browser
-# driver.quit()
-
-
 # Task 1: Review robots.txt to Ensure Policy Compliance
 
 # I visited https://durhamcountylibrary.org/robots.txt and reviewed the policy.
@@ -54,19 +39,66 @@ url = "https://durhamcounty.bibliocommons.com/v2/search?query=learning%20spanish
 
 print("Loading page...")
 driver.get(url)
-time.sleep(3)        # Wait for page to fully load (important for JS sites)
+time.sleep(4)        # Wait for page to fully load (important for JS sites)
 
 
-# Find all search result <li> elements EPLACE WITH THE CLASS FROM TASK 2
+# Find all search result <li> elements REPLACE WITH THE CLASS FROM TASK 2
 search_results = driver.find_elements(By.CLASS_NAME, "cp-search-result-item")
+
+print(f"Found {len(search_results)} book results.")
 
 # Extract title and author from each result
 books_data = []
+
 for result in search_results:
-    title = result.find_element(By.CLASS_NAME, "title-content").text
-    author = result.find_element(By.CLASS_NAME, "author-link").text
-    books_data.append({"title": title, "author": author})
+    try:
+        # Title
+        title = result.find_element(By.CLASS_NAME, "title-content").text.strip()
+
+        # Author(s) - Handling multiple authors
+        author_elements = result.find_elements(By.CLASS_NAME, "author-link")
+        authors = [author.text.strip() for author in author_elements if author.text.strip()]
+        author_str = "; ".join(authors) if authors else "No Author"
+
+        book = {
+            "Title": title,
+            "Author": author_str
+        }
+
+        books_data.append(book)
+
+    except Exception as e:
+        print(f"Skipping one item due to error: {e}")
+        continue
 
 # Convert to DataFrame
 df = pd.DataFrame(books_data)
+#print("SCRAPED BOOKS FROM DURHAM COUNTY LIBRARY")
+#print(df)
+
+
+
+# Task 4: Write out the Data
+import json
+import os
+
+
+# Create assignment8 folder if it doesn't exist
+#os.makedirs('assignment8', exist_ok=True)
+
+# Save to CSV
+csv_path = 'get_books.csv'
+df.to_csv(csv_path, index=False)
+print(f"Data saved to {csv_path}")
+
+# Save to JSON
+json_path = 'get_books.json'
+with open(json_path, 'w', encoding='utf-8') as f:
+    json.dump(books_data, f, ensure_ascii=False, indent=4)
+print(f"Data saved to {json_path}")
+
+print("SCRAPED BOOKS FROM DURHAM COUNTY LIBRARY AFTER SAVING TO FILES")
 print(df)
+
+# Close browser
+#driver.quit()
