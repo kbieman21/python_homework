@@ -26,7 +26,7 @@ import time
 
 # Setup browser options
 options = Options()
-options.add_argument("--headless")  # Remove this line to see the browser window
+options.add_argument("--headless")  # Remove this line to see the browser window for debugging
 options.add_argument("--no-sandbox")
 options.add_argument("user-agent=Mozilla/5.0 (Educational Scraper - Bootcamp Project)")
 
