@@ -12,6 +12,7 @@
 # <li class="row cp-search-result-item fade-enter-done">
 # <span aria-hidden="true" class="title-content">Animal Farm</span>
 # <span class="cp-author-link"><span><a target="_parent" rel="noopener noreferrer" class="author-link" data-key="author-link" href="/v2/search?origin=core-catalog-explore&amp;query=Orwell%2C%20George&amp;searchType=author">Orwell, George</a></span></span>
+# <div class="format">eBook, 2025 — Spanish</div>
 
 
 # Task 3: Write a Program to Extract this Data
@@ -47,7 +48,7 @@ search_results = driver.find_elements(By.CLASS_NAME, "cp-search-result-item")
 
 print(f"Found {len(search_results)} book results.")
 
-# Extract title and author from each result
+# Extract title, author, and format of the year from each result
 books_data = []
 
 for result in search_results:
@@ -60,9 +61,13 @@ for result in search_results:
         authors = [author.text.strip() for author in author_elements if author.text.strip()]
         author_str = "; ".join(authors) if authors else "No Author"
 
+        # format
+        format_info = result.find_element(By.CLASS_NAME, "format").text.strip() if result.find_elements(By.CLASS_NAME, "format") else "No Format"
+
         book = {
             "Title": title,
-            "Author": author_str
+            "Author": author_str,
+            "Format": format_info
         }
 
         books_data.append(book)
