@@ -1,0 +1,15 @@
+Challenges Faced in This Assignment:
+
+1. The OWASP website structure uses dynamic content and specific link patterns. 
+I had to use XPath with contains('A0') instead of simple class names because the 
+items are inside different containers.
+
+2. Some delays were needed (time.sleep) because the page loads JavaScript content. 
+Without proper waiting, Selenium couldn't find the elements.
+
+3. The main project page (www-project-top-ten) redirects/links to the 2025 version, 
+so I had to make sure I was targeting the correct elements.
+
+I resolved these by using browser developer tools (right click inspect) extensively 
+and testing XPath in the console before putting it in the code. Using try-except also 
+helped prevent the script from crashing on small issues.

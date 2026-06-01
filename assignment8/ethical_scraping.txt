@@ -1,0 +1,30 @@
+
+
+# Task 5: Ethical Web Scraping
+
+# https://en.wikipedia.org/robots.txt
+
+Task 5: Ethical Web Scraping
+
+1. Analysis of Wikipedia's robots.txt
+
+- Which sections of the website are restricted for crawling?
+Most of the website is open for crawling, but there are many specific User-agents that are completely blocked (Disallow: /). 
+Examples of restricted bots include: MJ12bot, Mediapartners-Google, UbiCrawler, Zao, sitecheck.internetseer.com, Zealbot, 
+MSIECrawler, HTTrack, wget, grub-client, and many others. 
+These are mostly bad bots, site copiers, or very aggressive crawlers.
+
+- Are there specific rules for certain user agents?
+Yes. Wikipedia has many specific rules for different User-agents. 
+Some bots (like IsraBot and Orthogaffe) are allowed full access (Disallow: is empty). 
+However, many bots are completely blocked with "Disallow: /". 
+The default rule for general crawlers (User-agent: *) is not heavily restricted.
+
+2. Reflection on robots.txt
+
+Websites use robots.txt to communicate with web crawlers and scrapers about which parts of their site can or cannot be accessed. 
+It serves as a voluntary ethical guideline that helps prevent server overload, protects private or sensitive areas, and stops 
+malicious bots from copying entire websites. 
+
+By respecting robots.txt, scrapers demonstrate responsibility and ethical behavior. This promotes a healthier internet ecosystem 
+where websites are more willing to share public data, knowing that responsible developers will not abuse their resources.
