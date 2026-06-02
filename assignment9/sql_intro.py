@@ -195,7 +195,34 @@ try:
         cursor, "Alice Smith", "Better Homes & Gardens", "2028-01-01"
     )
     conn.commit()
-    print("Tables 'publishers', 'magazines', 'subscribers', and 'subscriptions' created successfully.")
+    print("Tables created successfully and data populated successfully.")
+
+
+    # Task 4: Write SQL Queries
+
+    # Retrieve all information from the subscribers table
+    cursor.execute("SELECT * FROM subscribers")
+    subscribers = cursor.fetchall()
+    print("\n--- All Subscribers ---")
+    for subscriber in subscribers:
+        print(subscriber)   
+
+
+    # Retrieve all magazines sorted by name
+    cursor.execute("SELECT * FROM magazines ORDER BY title")
+    magazines = cursor.fetchall()
+    print("\n--- All Magazines ---")
+    for magazine in magazines:
+        print(magazine)   
+
+
+    # Find magazines for a particular publisher using a JOIN
+    cursor.execute("SELECT magazines.id, magazines.title, publishers.name FROM magazines JOIN publishers ON magazines.publisher_id = publishers.id WHERE publishers.name = ?", ("Condé Nast",))
+    publisher_mags = cursor.fetchall()
+    print("\n--- Magazines Published by Condé Nast ---")
+    for mag in publisher_mags:
+        print(mag)
+
 
 except sqlite3.Error as e:
     # Catch and handle any SQL exceptions
@@ -206,6 +233,7 @@ finally:
     if 'conn' in locals():
         conn.close()
         print("Database connection closed.")
+
 
 
 
