@@ -94,6 +94,82 @@ def fetch_customer_averages():
             print("\nDatabase connection closed.")
 
 
+# Task 3: An Insert Transaction Based on Data
+def create_perez_transaction():
+    conn = None
+    try:
+        # 1. Connect and immediately turn on Foreign Key safety checks
+        conn = sqlite3.connect(db_path)
+        conn.execute("PRAGMA foreign_keys = 1")
+        cursor = conn.cursor()
+
+        # 2. Collect IDs from the database using SELECT statements
+        cursor.execute("SELECT customer_id FROM customers WHERE customer_name = 'Perez and Sons'")
+        cust_row = cursor.fetchone()
+        
+        cursor.execute("SELECT employee_id FROM employees WHERE first_name = 'Miranda' AND last_name = 'Harris'")
+        emp_row = cursor.fetchone()
+
+        # Find the 5 least expensive product IDs
+        cursor.execute("SELECT product_id FROM products ORDER BY price ASC LIMIT 5")
+        product_rows = cursor.fetchall()
+
+        if not cust_row or not emp_row or not product_rows:
+            print("\nError: Required customer, employee, or product records missing from lesson.db.")
+            return
+
+        customer_id = cust_row[0]
+        employee_id = emp_row[0]
+        product_ids = [row[0] for row in product_rows]
+
+        # 3. Open explicit transaction block
+        conn.execute("BEGIN TRANSACTION;")
+
+        # Insert the main order and catch the auto-generated ID using RETURNING
+        cursor.execute('''
+            INSERT INTO orders (customer_id, employee_id, date) 
+            VALUES (?, ?, DATE('now')) 
+            RETURNING order_id
+        ''', (customer_id, employee_id))
+        
+        new_order_id = cursor.fetchone()[0]
+
+        # Insert all 5 line items for this single order_id
+        for prod_id in product_ids:
+            cursor.execute('''
+                INSERT INTO line_items (order_id, product_id, quantity) 
+                VALUES (?, ?, 10)
+            ''', (new_order_id, prod_id))
+
+        # 4. Save everything together safely
+        conn.commit()
+        print(f"\n=== Task 3: Transaction Successful! Created Order ID {new_order_id} ===")
+
+        # 5. SELECT JOIN to print the finalized receipt
+        cursor.execute('''
+            SELECT line_items.line_item_id, line_items.quantity, products.product_name
+            FROM line_items
+            JOIN products ON line_items.product_id = products.product_id
+            WHERE line_items.order_id = ?
+        ''', (new_order_id,))
+        
+        receipt_items = cursor.fetchall()
+        print(f"{'Line Item ID':<12} | {'Qty':<4} | {'Product Name':<25}")
+        print("-" * 47)
+        for row in receipt_items:
+            print(f"{row[0]:<12} | {row[1]:<4} | {row[2]:<25}")
+
+    except sqlite3.Error as e:
+        print(f"\nDatabase error during transaction: {e}")
+        if conn:
+            conn.execute("ROLLBACK;")
+            print("Transaction rolled back safely.")
+    finally:
+        if conn:
+            conn.close()
+            print("\nDatabase connection closed.")
+            
 if __name__ == '__main__':
     #fetch_top_orders()
-    fetch_customer_averages()
+    #fetch_customer_averages()
+    create_perez_transaction()
