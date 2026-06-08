@@ -210,7 +210,7 @@ def fetch_top_employees():
             conn.close()
             print("\nDatabase connection closed.")
 if __name__ == '__main__':
-    #fetch_top_orders()
-    #fetch_customer_averages()
-    #create_perez_transaction()
+    fetch_top_orders()
+    fetch_customer_averages()
+    create_perez_transaction()
     fetch_top_employees()
