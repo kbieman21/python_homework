@@ -169,7 +169,48 @@ def create_perez_transaction():
             conn.close()
             print("\nDatabase connection closed.")
             
+
+# Task 4: Aggregation with HAVING
+def fetch_top_employees():
+    conn = None
+    try:
+        # 1. Open the database connection
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+        
+        # 2. Define the SQL statement with HAVING clause
+        query = '''
+            SELECT 
+                employees.employee_id, 
+                employees.first_name, 
+                employees.last_name, 
+                COUNT(orders.order_id) AS order_count
+            FROM employees
+            JOIN orders ON employees.employee_id = orders.employee_id
+            GROUP BY employees.employee_id
+            HAVING order_count > 5;
+        '''
+        
+        # 3. Issue the SQL statement
+        cursor.execute(query)
+        results = cursor.fetchall()
+        
+        # 4. Print results cleanly with aligned formatting
+        print("\n=== Task 4: Employees With More Than 5 Orders ===")
+        print(f"{'ID':<4} | {'First Name':<12} | {'Last Name':<12} | {'Orders':<6}")
+        print("-" * 45)
+        for row in results:
+            print(f"{row[0]:<4} | {row[1]:<12} | {row[2]:<12} | {row[3]:<6}")
+            
+    except sqlite3.Error as e:
+        print(f"A database error occurred in Task 4: {e}")
+    finally:
+        # 5. Close the database connection
+        if conn:
+            conn.close()
+            print("\nDatabase connection closed.")
 if __name__ == '__main__':
     #fetch_top_orders()
     #fetch_customer_averages()
-    create_perez_transaction()
+    #create_perez_transaction()
+    fetch_top_employees()
